@@ -23,14 +23,18 @@ void main() async {
 }
 
 Future<void> writeSave(String target, Request request) async {
-  var savePath = path.join('..', 'saves', '$target.json');
+  var savePath = path.join('saves', '$target.json');
+  var pathExists = await Directory('saves').exists();
+  if (!pathExists) {
+    await Directory('saves').create(recursive: true);
+  }
   var saveFile = File(savePath);
   var downstreamSaveContent = await request.readAsString();
   await saveFile.writeAsString(downstreamSaveContent);
 }
 
 Future<String> readSave(String target) async {
-  var savePath = path.join('..', 'saves', '$target.json');
+  var savePath = path.join('saves', '$target.json');
   var saveFile = File(savePath);
   var downstreamSaveContent = await saveFile.readAsString();
   return downstreamSaveContent;
